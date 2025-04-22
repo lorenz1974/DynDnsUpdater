@@ -1,0 +1,99 @@
+/* Optimized styles for DynDNS Updater */
+
+/* Reset and base styles */
+:root {
+  --primary-color: #6c757d;
+  --primary-hover: #5a6268;
+  --text-color: #333;
+  --light-bg: rgba(255, 255, 255, 0.9);
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Background and main layout */
+body {
+  background-image: url('./assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+}
+
+/* Label styles */
+.form-label {
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-color);
+}
+
+
+.fs-6 {
+  font-size: 0.8rem;
+}
+
+.fs-7 {
+  font-size: 0.7rem;
+}
+
+.fs-9 {
+  font-size: 0.6rem;
+}
+
+/* Input customization */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+/* Button styles */
+.btn-secondary {
+  background-color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.65;
+}
+
+/* Animations and transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.alert {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    width: 95% !important;
+    padding: 15px !important;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}

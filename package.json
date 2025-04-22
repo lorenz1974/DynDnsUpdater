@@ -1,0 +1,38 @@
+{
+  "name": "dyndnsupdater",
+  "private": true,
+  "version": "0.3.1",
+  "releaseDate": "20250420-2341",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "update-release-date": "node ./updateReleaseDate.js",
+    "release": "npm run update-release-date && standard-version && git push --follow-tags origin develop",
+    "release:patch": "npm run update-release-date && standard-version --release-as minor && git push --follow-tags origin develop",
+    "release:bugfix": "npm run update-release-date && standard-version --release-as patch && git push --follow-tags origin develop",
+    "push": "git push --follow-tags origin develop",
+    "version": "node ./updateReleaseDate.js && git add ."
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "git-flow": "^0.2.0",
+    "globals": "^16.0.0",
+    "standard-version": "^9.5.0",
+    "vite": "^6.3.1"
+  }
+}
