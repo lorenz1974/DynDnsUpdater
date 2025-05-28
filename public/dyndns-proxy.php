@@ -119,62 +119,131 @@ $queryString = http_build_query($queryParams);
 // Construct the final URL
 $finalUrl = $targetUrl . (strpos($targetUrl, '?') !== false ? '&' : '?') . $queryString;
 
-// Initialize cURL session
-$ch = curl_init();
-
-// Set cURL options
-curl_setopt($ch, CURLOPT_URL, $finalUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_USERAGENT, 'DynDNS-Proxy/1.1.1');
-
-// Prepare headers to forward
-$forwardHeaders = [];
-
-// Add authorization header if present
-if (!empty($authHeader)) {
-    $forwardHeaders[] = "Authorization: $authHeader";
-    logMessage("Authorization header found and will be forwarded");
-} else {
-    logMessage("No Authorization header found in the request");
-}
-
-// Forward other relevant headers
-if (!empty($requestHeaders['User-Agent'])) {
-    curl_setopt($ch, CURLOPT_USERAGENT, $requestHeaders['User-Agent']);
-}
-
-if (!empty($requestHeaders['Accept'])) {
-    $forwardHeaders[] = "Accept: " . $requestHeaders['Accept'];
-}
-
-if (!empty($requestHeaders['Accept-Language'])) {
-    $forwardHeaders[] = "Accept-Language: " . $requestHeaders['Accept-Language'];
-}
-
-// Debug log for all headers being forwarded
-if (!empty($forwardHeaders)) {
-    logMessage("Forwarding headers: " . json_encode($forwardHeaders));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $forwardHeaders);
-}
-
 // Log the request
 logMessage("Making request to: $finalUrl");
 
-// Execute the request
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$error = curl_error($ch);
+// Check if cURL extension is available
+$response = null;
+$httpCode = 500;
+$error = '';
 
-// Close cURL session
-curl_close($ch);
+if (function_exists('curl_init')) {
+    // Use cURL if available
+    // Initialize cURL session
+    $ch = curl_init();
 
-// Check for cURL errors
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_URL, $finalUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'DynDNS-Proxy/1.1.1');
+
+    // Prepare headers to forward
+    $forwardHeaders = [];
+
+    // Add authorization header if present
+    if (!empty($authHeader)) {
+        $forwardHeaders[] = "Authorization: $authHeader";
+        logMessage("Authorization header found and will be forwarded");
+    } else {
+        logMessage("No Authorization header found in the request");
+    }
+
+    // Forward other relevant headers
+    if (!empty($requestHeaders['User-Agent'])) {
+        curl_setopt($ch, CURLOPT_USERAGENT, $requestHeaders['User-Agent']);
+    }
+
+    if (!empty($requestHeaders['Accept'])) {
+        $forwardHeaders[] = "Accept: " . $requestHeaders['Accept'];
+    }
+
+    if (!empty($requestHeaders['Accept-Language'])) {
+        $forwardHeaders[] = "Accept-Language: " . $requestHeaders['Accept-Language'];
+    }
+
+    // Debug log for all headers being forwarded
+    if (!empty($forwardHeaders)) {
+        logMessage("Forwarding headers: " . json_encode($forwardHeaders));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $forwardHeaders);
+    }
+
+    // Execute the request
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+
+    // Close cURL session
+    curl_close($ch);
+} else {
+    // Use file_get_contents as a fallback when cURL is not available
+    logMessage("cURL not available, using file_get_contents() instead");
+
+    try {
+        // Create a stream context with the necessary options
+        $opts = [
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 30,
+                'follow_location' => 1,
+                'user_agent' => 'DynDNS-Proxy/1.1.1',
+            ]
+        ];
+
+        // Add authorization header if present
+        if (!empty($authHeader)) {
+            if (!isset($opts['http']['header'])) {
+                $opts['http']['header'] = '';
+            }
+            $opts['http']['header'] .= "Authorization: $authHeader\r\n";
+            logMessage("Authorization header found and will be forwarded");
+        }
+
+        // Forward other relevant headers
+        if (!empty($requestHeaders['User-Agent'])) {
+            $opts['http']['user_agent'] = $requestHeaders['User-Agent'];
+        }
+
+        if (!empty($requestHeaders['Accept'])) {
+            if (!isset($opts['http']['header'])) {
+                $opts['http']['header'] = '';
+            }
+            $opts['http']['header'] .= "Accept: " . $requestHeaders['Accept'] . "\r\n";
+        }
+
+        if (!empty($requestHeaders['Accept-Language'])) {
+            if (!isset($opts['http']['header'])) {
+                $opts['http']['header'] = '';
+            }
+            $opts['http']['header'] .= "Accept-Language: " . $requestHeaders['Accept-Language'] . "\r\n";
+        }
+
+        // Create a stream context
+        $context = stream_context_create($opts);
+
+        // Get the response
+        $response = file_get_contents($finalUrl, false, $context);
+
+        // Get HTTP status code from headers
+        if (isset($http_response_header[0])) {
+            preg_match('{HTTP/\S*\s(\d{3})}', $http_response_header[0], $match);
+            $httpCode = $match[1] ?? 200;
+        } else {
+            $httpCode = 200;
+        }
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+        $httpCode = 500;
+        $response = false;
+    }
+}
+
+// Check for request errors
 if ($response === false) {
     http_response_code(500);
     echo "Error: " . $error;
-    logMessage("cURL error: $error");
+    logMessage("Request error: $error");
     exit;
 }
 
