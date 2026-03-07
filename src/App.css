@@ -19,24 +19,36 @@ body {
   background-image: url('./assets/background.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  /* scroll instead of fixed: fixes a well-known rendering bug on iOS/Safari */
+  background-attachment: scroll;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  align-items: flex-start;
+  min-height: 100dvh; /* dvh adapts to mobile browser chrome */
   margin: 0;
+  /* safe-area-inset-* handles notched phones (iPhone X+) and Android gesture bar */
+  padding: max(1.5rem, env(safe-area-inset-top))
+    max(0.75rem, env(safe-area-inset-right))
+    max(1.5rem, env(safe-area-inset-bottom))
+    max(0.75rem, env(safe-area-inset-left));
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text-color);
+}
+
+/* On taller viewports, vertically center the card */
+@media (min-height: 700px) {
+  body {
+    align-items: center;
+  }
 }
 
 /* Label styles */
 .form-label {
   font-weight: bold;
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
   color: var(--text-color);
 }
-
 
 .fs-6 {
   font-size: 0.8rem;
@@ -50,8 +62,16 @@ body {
   font-size: 0.6rem;
 }
 
+/* Inputs: 1rem (16 px) prevents iOS from auto-zooming on focus */
+.form-control,
+.form-select {
+  font-size: 1rem;
+  min-height: 44px; /* minimum comfortable touch target */
+}
+
 /* Input customization */
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
 }
@@ -59,16 +79,33 @@ body {
 /* Button styles */
 .btn-secondary {
   background-color: var(--primary-color);
-  transition: all 0.3s ease;
+  min-height: 48px; /* comfortable touch target */
+  font-size: 1rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.btn-secondary:hover:not(:disabled) {
+/* Hover effect only on pointer devices (not touch screens) */
+@media (hover: hover) {
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+}
+
+/* Active / tap feedback on touch devices */
+.btn-secondary:active:not(:disabled) {
   background-color: var(--primary-hover);
-  transform: translateY(-2px);
+  transform: scale(0.98);
 }
 
 .btn-secondary:disabled {
   opacity: 0.65;
+}
+
+/* Password show/hide button */
+.btn-outline-secondary {
+  min-height: 44px;
+  border-color: #ced4da;
 }
 
 /* Animations and transitions */
@@ -83,17 +120,39 @@ body {
 }
 
 .alert {
-  animation: fadeIn 0.5s ease-in;
+  animation: fadeIn 0.4s ease-in;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    width: 95% !important;
-    padding: 15px !important;
+/* IP status card */
+.ip-status-card {
+  width: 100%;
+}
+
+.ip-status-card .ip-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+}
+
+.ip-status-card .ip-value {
+  font-size: 1rem;
+  font-weight: 600;
+  word-break: break-all; /* long IPs wrap on narrow screens */
+}
+
+/* Responsive tweaks for small phones */
+@media (max-width: 400px) {
+  body {
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
   }
 
-  h1 {
-    font-size: 1.8rem;
+  h3 {
+    font-size: 1.3rem;
+  }
+
+  .ip-status-card .ip-value {
+    font-size: 0.9rem;
   }
 }

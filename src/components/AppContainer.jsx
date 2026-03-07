@@ -16,7 +16,7 @@ import { Container } from 'react-bootstrap'
 const AppContainer = ({ children }) => {
   return (
     <Container
-      className='mt-2 p-4 rounded shadow-sm bg-light w-100'
+      className='p-4 rounded shadow-sm bg-light w-100'
       style={{ maxWidth: '600px' }}
     >
       {children}

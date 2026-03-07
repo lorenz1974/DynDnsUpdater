@@ -3,8 +3,8 @@
  * @description Form component for DynDNS settings with conditional submit button state
  */
 
-import React from 'react'
-import { Form, Button, Spinner } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Form, Button, Spinner, InputGroup } from 'react-bootstrap'
 
 /**
  * Form component for DynDNS settings
@@ -43,6 +43,8 @@ const DynDnsForm = ({
   onRefreshIntervalChange,
   timeUntilRefresh,
 }) => {
+  const [showPassword, setShowPassword] = useState(false)
+
   /**
    * Determines if the update button should be disabled
    * The button should be disabled if:
@@ -86,7 +88,7 @@ const DynDnsForm = ({
     <Form
       onSubmit={onSubmit}
       className='bg-white p-3 rounded shadow-sm text-start'
-      style={{ maxWidth: '400px', width: '100%', margin: '0 auto' }}
+      style={{ width: '100%', margin: '0 auto' }}
     >
       <Form.Group className='mb-3' controlId='hostname'>
         <Form.Label className='form-label'>Hostname</Form.Label>
@@ -114,14 +116,26 @@ const DynDnsForm = ({
 
       <Form.Group className='mb-3' controlId='password'>
         <Form.Label className='form-label'>Password</Form.Label>
-        <Form.Control
-          type='password'
-          placeholder='Enter password'
-          value={formData.password}
-          onChange={onInputChange}
-          disabled={isLoading}
-          required
-        />
+        <InputGroup>
+          <Form.Control
+            type={showPassword ? 'text' : 'password'}
+            placeholder='Enter password'
+            value={formData.password}
+            onChange={onInputChange}
+            disabled={isLoading}
+            required
+          />
+          <Button
+            variant='outline-secondary'
+            onClick={() => setShowPassword((v) => !v)}
+            disabled={isLoading}
+            type='button'
+            tabIndex={-1}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </Button>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group className='mb-3' controlId='refreshInterval'>
@@ -144,7 +158,6 @@ const DynDnsForm = ({
       </Form.Group>
 
       <Form.Group className='mb-3' controlId='forceUpdate'>
-        {/* <Form.Label className='form-label'>Force update</Form.Label> */}
         <Form.Check
           type='checkbox'
           checked={forceUpdate}

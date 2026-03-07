@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Row, Col, Alert, Spinner } from 'react-bootstrap'
+import { Alert, Spinner } from 'react-bootstrap'
 
 /**
  * Component to display IP status information
@@ -17,48 +17,65 @@ import { Row, Col, Alert, Spinner } from 'react-bootstrap'
  * @returns {JSX.Element} The rendered status component
  */
 const StatusDisplay = ({ currentIp, storedIp, status, isLoading }) => {
+  const ipMatch = currentIp && storedIp && currentIp === storedIp
+
   return (
     <>
-      <Row className='mt-4 text-center'>
-        <Col>
-          <strong>Current IP:</strong>{' '}
-          {isLoading && !currentIp ? (
-            <Spinner animation='border' size='sm' role='status' />
-          ) : (
-            currentIp || 'Waiting...'
-          )}
-        </Col>
-      </Row>
-      <Row className='text-center'>
-        <Col>
-          <strong>Registered IP:</strong>{' '}
-          {isLoading && !storedIp ? (
-            <Spinner animation='border' size='sm' role='status' />
-          ) : (
-            storedIp || 'Not registered'
-          )}
-        </Col>
-      </Row>
-      {status.message && (
-        <Row className='mt-3'>
-          <Col>
-            <Alert variant={status.type} className='shadow-sm'>
-              {isLoading ? (
-                <div className='d-flex align-items-center'>
-                  <Spinner
-                    animation='border'
-                    size='sm'
-                    role='status'
-                    className='me-2'
-                  />
-                  <span>Processing request...</span>
-                </div>
+      <div className='ip-status-card bg-white p-3 rounded shadow-sm mt-4'>
+        <div className='d-flex justify-content-between align-items-center gap-2'>
+          {/* Current IP */}
+          <div className='text-start'>
+            <div className='ip-label'>Current IP</div>
+            <div className='ip-value'>
+              {isLoading && !currentIp ? (
+                <Spinner animation='border' size='sm' role='status' />
               ) : (
-                status.message
+                currentIp || '—'
               )}
-            </Alert>
-          </Col>
-        </Row>
+            </div>
+          </div>
+
+          {/* Sync status badge — shown only when both IPs are known */}
+          {currentIp && storedIp && (
+            <div className='text-center flex-shrink-0'>
+              <span
+                className={`badge rounded-pill ${ipMatch ? 'bg-success' : 'bg-warning text-dark'}`}
+              >
+                {ipMatch ? 'Synced' : 'Changed'}
+              </span>
+            </div>
+          )}
+
+          {/* Registered IP */}
+          <div className='text-end'>
+            <div className='ip-label'>Registered IP</div>
+            <div className='ip-value'>
+              {isLoading && !storedIp ? (
+                <Spinner animation='border' size='sm' role='status' />
+              ) : (
+                storedIp || '—'
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {status.message && (
+        <Alert variant={status.type} className='shadow-sm mt-3'>
+          {isLoading ? (
+            <div className='d-flex align-items-center'>
+              <Spinner
+                animation='border'
+                size='sm'
+                role='status'
+                className='me-2'
+              />
+              <span>Processing request...</span>
+            </div>
+          ) : (
+            status.message
+          )}
+        </Alert>
       )}
     </>
   )

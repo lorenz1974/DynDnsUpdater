@@ -11,7 +11,7 @@ import React from 'react'
  * @returns {JSX.Element} The rendered header component
  */
 const AppHeader = () => {
-  return <h3 className='text-center mb3-2'>DynDNS Updater</h3>
+  return <h3 className='text-center mb-3'>DynDNS Updater</h3>
 }
 
 export default AppHeader
