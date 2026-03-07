@@ -123,19 +123,15 @@ body {
   animation: fadeIn 0.4s ease-in;
 }
 
-/* IP status card */
-.ip-status-card {
-  width: 100%;
-}
-
-.ip-status-card .ip-label {
+/* IP status labels inside the status Card */
+.ip-label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #6c757d;
 }
 
-.ip-status-card .ip-value {
+.ip-value {
   font-size: 1rem;
   font-weight: 600;
   word-break: break-all; /* long IPs wrap on narrow screens */
@@ -152,7 +148,7 @@ body {
     font-size: 1.3rem;
   }
 
-  .ip-status-card .ip-value {
+  .ip-value {
     font-size: 0.9rem;
   }
 }

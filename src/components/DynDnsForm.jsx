@@ -85,11 +85,7 @@ const DynDnsForm = ({
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      className='bg-white p-3 rounded shadow-sm text-start'
-      style={{ width: '100%', margin: '0 auto' }}
-    >
+    <Form onSubmit={onSubmit}>
       <Form.Group className='mb-3' controlId='hostname'>
         <Form.Label className='form-label'>Hostname</Form.Label>
         <Form.Control

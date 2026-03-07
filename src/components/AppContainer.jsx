@@ -4,10 +4,10 @@
  */
 
 import React from 'react'
-import { Container } from 'react-bootstrap'
+import { Container, Card } from 'react-bootstrap'
 
 /**
- * Container component that wraps the application
+ * Container component that wraps the application inside a Bootstrap Card
  *
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to render
@@ -15,11 +15,8 @@ import { Container } from 'react-bootstrap'
  */
 const AppContainer = ({ children }) => {
   return (
-    <Container
-      className='p-4 rounded shadow-sm bg-light w-100'
-      style={{ maxWidth: '600px' }}
-    >
-      {children}
+    <Container className='px-2' style={{ maxWidth: '600px' }}>
+      <Card className='shadow-sm'>{children}</Card>
     </Container>
   )
 }

@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Alert, Spinner } from 'react-bootstrap'
+import { Card, Badge, Stack, Alert, Spinner } from 'react-bootstrap'
 
 /**
  * Component to display IP status information
@@ -21,57 +21,57 @@ const StatusDisplay = ({ currentIp, storedIp, status, isLoading }) => {
 
   return (
     <>
-      <div className='ip-status-card bg-white p-3 rounded shadow-sm mt-4'>
-        <div className='d-flex justify-content-between align-items-center gap-2'>
-          {/* Current IP */}
-          <div className='text-start'>
-            <div className='ip-label'>Current IP</div>
-            <div className='ip-value'>
-              {isLoading && !currentIp ? (
-                <Spinner animation='border' size='sm' role='status' />
-              ) : (
-                currentIp || '—'
-              )}
+      <Card className='mt-3 border-0 bg-light'>
+        <Card.Body className='py-2 px-3'>
+          <Stack
+            direction='horizontal'
+            className='justify-content-between align-items-center'
+          >
+            {/* Current IP */}
+            <div>
+              <div className='ip-label'>Current IP</div>
+              <div className='ip-value'>
+                {isLoading && !currentIp ? (
+                  <Spinner animation='border' size='sm' role='status' />
+                ) : (
+                  currentIp || '—'
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Sync status badge — shown only when both IPs are known */}
-          {currentIp && storedIp && (
-            <div className='text-center flex-shrink-0'>
-              <span
-                className={`badge rounded-pill ${ipMatch ? 'bg-success' : 'bg-warning text-dark'}`}
+            {/* Sync status badge — visible only when both IPs are known */}
+            {currentIp && storedIp && (
+              <Badge
+                bg={ipMatch ? 'success' : 'warning'}
+                text={ipMatch ? undefined : 'dark'}
+                pill
               >
                 {ipMatch ? 'Synced' : 'Changed'}
-              </span>
-            </div>
-          )}
+              </Badge>
+            )}
 
-          {/* Registered IP */}
-          <div className='text-end'>
-            <div className='ip-label'>Registered IP</div>
-            <div className='ip-value'>
-              {isLoading && !storedIp ? (
-                <Spinner animation='border' size='sm' role='status' />
-              ) : (
-                storedIp || '—'
-              )}
+            {/* Registered IP */}
+            <div className='text-end'>
+              <div className='ip-label'>Registered IP</div>
+              <div className='ip-value'>
+                {isLoading && !storedIp ? (
+                  <Spinner animation='border' size='sm' role='status' />
+                ) : (
+                  storedIp || '—'
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </Stack>
+        </Card.Body>
+      </Card>
 
       {status.message && (
-        <Alert variant={status.type} className='shadow-sm mt-3'>
+        <Alert variant={status.type} className='mt-3'>
           {isLoading ? (
-            <div className='d-flex align-items-center'>
-              <Spinner
-                animation='border'
-                size='sm'
-                role='status'
-                className='me-2'
-              />
+            <Stack direction='horizontal' gap={2}>
+              <Spinner animation='border' size='sm' role='status' />
               <span>Processing request...</span>
-            </div>
+            </Stack>
           ) : (
             status.message
           )}

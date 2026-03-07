@@ -12,6 +12,7 @@
  */
 
 import React, { useEffect, useCallback } from 'react'
+import { Card } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/App.css'
 
@@ -106,26 +107,28 @@ const App = () => {
   return (
     <AppContainer>
       <AppHeader />
-      <DynDnsForm
-        formData={dynDns.formData}
-        onInputChange={dynDns.handleInputChange}
-        onSubmit={dynDns.handleSubmit}
-        forceUpdate={dynDns.forceUpdate}
-        onForceUpdateChange={dynDns.handleForceUpdateChange}
-        isLoading={dynDns.isLoading}
-        currentIp={dynDns.currentIp}
-        storedIp={dynDns.storedIp}
-        refreshInterval={dynDns.refreshInterval}
-        refreshIntervals={REFRESH_INTERVALS}
-        onRefreshIntervalChange={handleRefreshIntervalChange}
-        timeUntilRefresh={refreshTimer.formattedTimeRemaining}
-      />
-      <StatusDisplay
-        currentIp={dynDns.currentIp}
-        storedIp={dynDns.storedIp}
-        status={dynDns.status}
-        isLoading={dynDns.isLoading}
-      />
+      <Card.Body className='p-3 p-md-4'>
+        <DynDnsForm
+          formData={dynDns.formData}
+          onInputChange={dynDns.handleInputChange}
+          onSubmit={dynDns.handleSubmit}
+          forceUpdate={dynDns.forceUpdate}
+          onForceUpdateChange={dynDns.handleForceUpdateChange}
+          isLoading={dynDns.isLoading}
+          currentIp={dynDns.currentIp}
+          storedIp={dynDns.storedIp}
+          refreshInterval={dynDns.refreshInterval}
+          refreshIntervals={REFRESH_INTERVALS}
+          onRefreshIntervalChange={handleRefreshIntervalChange}
+          timeUntilRefresh={refreshTimer.formattedTimeRemaining}
+        />
+        <StatusDisplay
+          currentIp={dynDns.currentIp}
+          storedIp={dynDns.storedIp}
+          status={dynDns.status}
+          isLoading={dynDns.isLoading}
+        />
+      </Card.Body>
       <AppFooter />
     </AppContainer>
   )
