@@ -1,8 +1,6 @@
 # DynDNS Updater
 
-A Progressive Web Application built with React that automatically updates your device's IP address using the DynDNS service.
-
-![DynDNS Updater](https://wips.plug.it/cips/tecnologia/cms/2017/04/indirizzo-ip.jpg)
+A Progressive Web Application built with React and React Bootstrap that automatically updates your device's IP address using the DynDNS service.
 
 ## Overview
 
@@ -23,17 +21,18 @@ npm run build
 
 ## Component Architecture and Data Flow
 
-The application follows a well-structured architecture that separates concerns between UI components and business logic hooks:
+The application follows a well-structured architecture that separates concerns between UI components and business logic hooks. All UI is built with **React Bootstrap** components (`Card`, `Badge`, `Stack`, `Form`, `Alert`, `Spinner`, etc.) — no raw HTML elements with manually written Bootstrap class strings.
 
 ### Component Hierarchy and Relationships
 
 ```
 App (Root Container)
-├── AppContainer (Layout Wrapper)
-│   ├── AppHeader (Branding Component)
-│   ├── DynDnsForm (User Input Component)
-│   ├── StatusDisplay (Feedback Component)
-│   └── AppFooter (Metadata Component)
+└── AppContainer          → Container + Card (shadow)
+      ├── AppHeader        → Card.Header (bg-secondary)
+      ├── Card.Body        → (in App.jsx)
+      │     ├── DynDnsForm    → Form / InputGroup / Button / Spinner
+      │     └── StatusDisplay → Card (bg-light) + Badge + Stack + Alert
+      └── AppFooter        → Card.Footer
 ```
 
 ### Data Flow and Component Interactions
@@ -42,7 +41,7 @@ The application follows a unidirectional data flow pattern:
 
 1. **App Component (Container)**: Acts as the central orchestrator that:
 
-   - Initializes and integrates the custom hooks
+   - Initialises and integrates the custom hooks
    - Passes state and callbacks to child components
    - Coordinates interactions between components
 
@@ -54,64 +53,85 @@ The application follows a unidirectional data flow pattern:
 
 3. **UI Components (Presentation)**:
    - Receive data and callbacks as props from the App component
-   - Render the UI based on the current state
+   - Render the UI using React Bootstrap components
    - Forward user actions back to the App component via callbacks
 
 This architecture provides several benefits:
 
 - Clean separation between business logic and UI
 - Improved testability of individual components
-- Better code organization and maintainability
+- Better code organisation and maintainability
 - Reusable hooks that can be shared across components
 
 ### Core Components
 
 #### `App.jsx`
 
-The main application container that orchestrates the component hierarchy and serves as the central state coordination point. It integrates the `useDynDnsUpdater` hook and distributes props to child components.
+The main application container that orchestrates the component hierarchy and serves as the central state coordination point. It integrates `useDynDnsUpdater` and `useRefreshTimer`, distributes props to child components, and wraps the two main sections in a `Card.Body`.
 
 ```javascript
-// Key responsibilities
-- Manages application state
-- Handles form submission
-- Coordinates between components
-- Controls auto-refresh functionality
+return (
+  <AppContainer>
+    <AppHeader />
+    <Card.Body className='p-3 p-md-4'>
+      <DynDnsForm {...formProps} />
+      <StatusDisplay {...statusProps} />
+    </Card.Body>
+    <AppFooter />
+  </AppContainer>
+)
 ```
 
-**Why it's structured this way**: The App component follows the "Smart Container" pattern, centralizing application logic while delegating UI rendering to specialized child components. This makes the application easier to maintain and test.
+**Why it's structured this way**: The App component follows the "Smart Container" pattern, centralising application logic while delegating UI rendering to specialised child components.
 
 #### `AppContainer.jsx`
 
-A layout wrapper component that provides consistent styling and structure for the application interface. Manages responsive behavior and creates visual hierarchy.
+Wraps the entire application in a Bootstrap `Container` (for centering and max-width) and a `Card` (for the white card surface with shadow).
 
-**Why it's used**: By isolating layout concerns in a dedicated component, the application maintains consistency while allowing other components to focus on their specific features.
+**Why it's used**: Isolating layout concerns in a dedicated component keeps the rest of the tree clean and makes responsive adjustments straightforward.
+
+#### `AppHeader.jsx`
+
+Renders a `Card.Header` with the application title, styled with Bootstrap's secondary colour scheme.
+
+**Why it's used**: Leveraging `Card.Header` ensures the title integrates correctly with the surrounding `Card` border and padding.
 
 #### `DynDnsForm.jsx`
 
-The primary user interface for inputting DynDNS credentials and configuration:
+The primary user interface for inputting DynDNS credentials and configuration. Built entirely with React Bootstrap components:
 
 ```javascript
 // Key features
-- Input fields for hostname, username, and password
-- Interval selection for auto-refresh timing
-- Force update toggle option
-- Update button with smart enabling/disabling logic
+- Form.Group / Form.Control / Form.Label for each field
+- InputGroup for password field with Show/Hide toggle
+- Form.Select for the auto-refresh interval
+- Form.Check for the force-update toggle
+- Button + Spinner for the submit action
 ```
 
-**Why it's structured this way**: This component isolates all form-related concerns, making it easier to update form validation logic or add new fields without affecting the rest of the application.
+**Why it's structured this way**: This component isolates all form-related concerns, making it straightforward to update validation logic or add new fields without touching the rest of the application.
 
 #### `StatusDisplay.jsx`
 
-Presents real-time information about the application's state:
+Presents real-time information about the application's state using React Bootstrap components:
 
 ```javascript
-// Information displayed
-- Current IP address
-- Last known IP address stored at DynDNS
-- Status messages and error notifications
+// Structure
+- Card (border-0, bg-light)  →  IP address area
+  └── Stack (horizontal)
+        ├── Current IP label + value
+        ├── Badge (Synced / Changed, pill)
+        └── Registered IP label + value
+- Alert  →  status messages and errors
 ```
 
-**Why it's used**: Separating status display from other components allows for more focused updates and prevents the UI from becoming cluttered.
+**Why it's used**: Separating status display from other components allows for focused updates and keeps the IP comparison logic contained in one place.
+
+#### `AppFooter.jsx`
+
+Renders a `Card.Footer` with version and release date sourced from `package.json`.
+
+**Why it's used**: `Card.Footer` provides the correct border and background automatically, eliminating the need for manual styling classes.
 
 #### `DynDnsService.js`
 
@@ -125,24 +145,24 @@ A service module (not a React component) that encapsulates API communication log
 - Authentication header management
 ```
 
-**Why it's structured this way**: This service module isolates all external API interactions, making it easier to update API endpoints, modify authentication methods, or handle changes in the DynDNS protocol without affecting the rest of the application.
+**Why it's structured this way**: Isolating all external API interactions makes it easy to update API endpoints, modify authentication methods, or handle changes in the DynDNS protocol without affecting any UI component.
 
 ### Custom Hooks
 
 #### `useLocalStorage.js`
 
-A specialized hook for persistent data storage that provides:
+A specialised hook for persistent data storage that provides:
 
 ```javascript
 // Implementation details
-- Automatic serialization/deserialization of JSON data
+- Automatic serialisation/deserialisation of JSON data
 - Value persistence across browser sessions
-- Synchronization with React state
+- Synchronisation with React state
 - Error handling for storage failures
 - Default values when no stored data exists
 ```
 
-**Why it's used**: This hook abstracts away the complexities of localStorage, offering an interface similar to React's useState but with persistence. It handles edge cases like storage quotas, invalid JSON, and initialization timing, preventing common errors and reducing code duplication.
+**Why it's used**: This hook abstracts away the complexities of `localStorage`, offering an interface similar to React's `useState` but with persistence.
 
 #### `useRefreshTimer.js`
 
@@ -150,15 +170,14 @@ A sophisticated timer management hook that:
 
 ```javascript
 // Advanced features
-- Maintains accurate countdown display
+- Maintains accurate countdown display (MM:SS)
 - Handles proper cleanup to prevent memory leaks
-- Provides formatted time remaining (MM:SS)
 - Supports dynamic interval changes
 - Enables pause/resume functionality
 - Self-corrects for time drift
 ```
 
-**Why it's structured this way**: Using refs and careful effect management, this hook solves the complex problem of integrating timer functionality with React's lifecycle. It prevents memory leaks and provides a stable, accurate countdown that works reliably even when components re-render.
+**Why it's structured this way**: Using refs and careful effect management, this hook solves the complex problem of integrating timer functionality with React's lifecycle.
 
 #### `useDynDnsUpdater.js`
 
@@ -174,38 +193,35 @@ The central business logic hook that:
 - Implements error recovery strategies
 ```
 
-**Why it's used**: This hook encapsulates the core application logic, separating it from presentation concerns. This makes the App component cleaner and allows the business logic to be reused or tested independently of the UI components.
+**Why it's used**: Encapsulating the core application logic here separates it from presentation concerns, keeping the App component clean and making the logic independently testable.
 
 ## Component Calling Sequence
 
-When the application starts, components are initialized in this sequence:
+When the application starts, components are initialised in this sequence:
 
-1. **App Component Initialization**:
+1. **App Component Initialisation**:
 
    ```javascript
-   // App.jsx (simplified)
    const App = () => {
-     // Initialize the DynDNS logic hook first
      const dynDns = useDynDnsUpdater()
 
-     // Set up timer with the refresh function from dynDns
      const refreshTimer = useRefreshTimer(
        dynDns.refreshInterval,
        () => dynDns.checkAndUpdateIp(),
        dynDns.isFormDataComplete
      )
 
-     // Trigger initial IP check on mount
      useEffect(() => {
        dynDns.performInitialCheck()
      }, [dynDns])
 
-     // Render the component hierarchy
      return (
        <AppContainer>
          <AppHeader />
-         <DynDnsForm {...formProps} />
-         <StatusDisplay {...statusProps} />
+         <Card.Body className='p-3 p-md-4'>
+           <DynDnsForm {...formProps} />
+           <StatusDisplay {...statusProps} />
+         </Card.Body>
          <AppFooter />
        </AppContainer>
      )
@@ -216,32 +232,21 @@ When the application starts, components are initialized in this sequence:
 
    ```javascript
    // DynDnsForm -> App -> useDynDnsUpdater -> DynDnsService
-   // When user clicks "Update DynDNS":
    onSubmit={(e) => {
      e.preventDefault()
-     dynDns.handleSubmit(e) // Calls checkAndUpdateIp internally
+     dynDns.handleSubmit(e)
    }}
    ```
 
 3. **During Auto-Refresh**:
    ```javascript
    // useRefreshTimer -> App -> useDynDnsUpdater -> DynDnsService
-   // When timer reaches zero:
    timerRef.current = setInterval(() => {
-     // When countdown reaches zero
      if (countdownRef.current <= 0) {
-       // Call the refresh callback from App
        callbackRef.current() // dynDns.checkAndUpdateIp()
      }
    }, 1000)
    ```
-
-This calling sequence ensures that:
-
-- Business logic is centralized in custom hooks
-- UI components remain focused on presentation
-- Event handling follows a clear, predictable path
-- The application responds appropriately to both user actions and timer events
 
 ## Implementation Details
 
@@ -256,8 +261,8 @@ The update process follows this sequence:
    - In development: Through Vite's proxy to bypass CORS
    - In production: Through the PHP proxy script
 5. **Response Processing**: Parses DynDNS response codes and updates application state
-6. **State Persistence**: Saves credentials and last known IP to localStorage
-7. **UI Feedback**: Updates status display with results
+6. **State Persistence**: Saves credentials and last known IP to `localStorage`
+7. **UI Feedback**: Updates `StatusDisplay` with results
 
 ### Proxy Implementation
 
@@ -304,13 +309,13 @@ The application implements robust error handling:
 - Storage access failures
 ```
 
-Each error type has specific recovery strategies, user feedback messages, and logging behaviors.
+Each error type has specific recovery strategies, user feedback messages, and logging behaviours.
 
 ## Security Considerations
 
-The application makes several security tradeoffs:
+The application makes several security trade-offs:
 
-- **Credential storage**: Credentials are stored in localStorage, which is accessible to JavaScript in the same origin. This convenience comes with the understanding that physical device access could compromise credentials.
+- **Credential storage**: Credentials are stored in `localStorage`, which is accessible to JavaScript in the same origin. This convenience comes with the understanding that physical device access could compromise credentials.
 
 - **Authentication forwarding**: The PHP proxy forwards authentication headers rather than storing credentials server-side, eliminating the need for backend database security.
 
