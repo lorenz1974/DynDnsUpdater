@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* correct vite base path to match GitHub Pages repo URL (case-sensitive) ([d2e755f](https://github.com/lorenz1974/DynDnsUpdater/commit/d2e755f5930deee05d1300dab1c253c6248b9729))
+* correct vite base path to lowercase `/dyndnsupdater/` to match production server path (case-sensitive) ([d2e755f](https://github.com/lorenz1974/DynDnsUpdater/commit/d2e755f5930deee05d1300dab1c253c6248b9729))
+* correct `DynDnsService.getBasePath()` return value to lowercase `/dyndnsupdater` to match production PHP proxy path
 
 ## [0.4.0](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.3.2...v0.4.0) (2025-05-28)
 

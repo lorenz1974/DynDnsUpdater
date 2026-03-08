@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/DynDnsUpdater/', // GitHub Pages serves the repo at /DynDnsUpdater/ (case-sensitive)
+  base: '/dyndnsupdater/', // production server path (lowercase, case-sensitive)
   resolve: {
     alias: {
       // Path aliases for cleaner imports

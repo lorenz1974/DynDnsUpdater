@@ -1,10 +1,14 @@
 # DynDNS Updater
 
-A Progressive Web Application built with React and React Bootstrap that automatically updates your device's IP address using the DynDNS service.
+**Version 0.4.1** — A Progressive Web Application built with React and React Bootstrap that automatically updates your device's IP address using the DynDNS service.
+
+> For detailed architecture documentation, module signatures, and event flow diagrams see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Overview
 
 DynDNS Updater is a lightweight, client-side application that helps maintain your dynamic DNS entries up-to-date by automatically detecting IP address changes and updating your DynDNS records accordingly.
+
+The production deployment is served at `/dyndnsupdater/` (all lowercase, case-sensitive). The Vite `base` config and `DynDnsService.getBasePath()` must match this path.
 
 ## Installation
 
