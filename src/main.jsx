@@ -16,6 +16,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '@/App'
+import UpdateModal from '@components/UpdateModal'
 import '@/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -122,7 +123,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   // diventa l'albero del Virtual DOM gestito da React.
   <ErrorBoundary>
     <App />
-  </ErrorBoundary>
+  </ErrorBoundary>,
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -134,30 +135,90 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/dyndnsupdater/service-worker.js')
       .then((registration) => {
-        console.log('✅ Service Worker registered:', registration.scope);
+        console.log('✅ Service Worker registered:', registration.scope)
 
         // Check for updates every hour
-        setInterval(() => {
-          registration.update();
-        }, 60 * 60 * 1000);
+        setInterval(
+          () => {
+            registration.update()
+          },
+          60 * 60 * 1000,
+        )
 
         // Listen for updates
         registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          
+          const newWorker = registration.installing
+
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New version available - notify user and reload
-              if (confirm('Nuova versione disponibile! Ricaricare l\'app?')) {
-                newWorker.postMessage({ type: 'SKIP_WAITING' });
-                window.location.reload();
-              }
+            if (
+              newWorker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
+              // New version available - show modal with version info
+              showUpdateModal(newWorker)
             }
-          });
-        });
+          })
+        })
       })
       .catch((error) => {
-        console.error('❌ Service Worker registration failed:', error);
-      });
-  });
+        console.error('❌ Service Worker registration failed:', error)
+      })
+  })
+}
+
+/**
+ * Show update modal with version information
+ * @param {ServiceWorker} newWorker - The new service worker instance
+ */
+function showUpdateModal(newWorker) {
+  // Get current version from localStorage or default
+  const currentVersion = localStorage.getItem('app-version') || '0.4.0'
+
+  // Fetch new version from version.json
+  fetch('/dyndnsupdater/version.json')
+    .then((response) => response.json())
+    .then((versionData) => {
+      const newVersion = versionData.version
+
+      // Create modal container
+      const modalContainer = document.createElement('div')
+      modalContainer.id = 'update-modal-root'
+      document.body.appendChild(modalContainer)
+
+      // Create React root for modal
+      const modalRoot = ReactDOM.createRoot(modalContainer)
+
+      const handleUpdate = () => {
+        // Update stored version
+        localStorage.setItem('app-version', newVersion)
+        // Skip waiting and reload
+        newWorker.postMessage({ type: 'SKIP_WAITING' })
+        window.location.reload()
+      }
+
+      const handleLater = () => {
+        // Close modal
+        modalRoot.unmount()
+        document.body.removeChild(modalContainer)
+      }
+
+      // Render modal
+      modalRoot.render(
+        <UpdateModal
+          show={true}
+          currentVersion={currentVersion}
+          newVersion={newVersion}
+          onUpdate={handleUpdate}
+          onLater={handleLater}
+        />,
+      )
+    })
+    .catch((error) => {
+      console.error('❌ Error fetching version info:', error)
+      // Fallback to simple confirm
+      if (confirm("Nuova versione disponibile! Ricaricare l'app?")) {
+        newWorker.postMessage({ type: 'SKIP_WAITING' })
+        window.location.reload()
+      }
+    })
 }

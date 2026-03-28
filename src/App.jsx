@@ -183,6 +183,18 @@ const App = () => {
   // ───────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     dynDns.performInitialCheck()
+    
+    // Store current version in localStorage for update comparison
+    fetch('/dyndnsupdater/version.json')
+      .then((response) => response.json())
+      .then((versionData) => {
+        if (!localStorage.getItem('app-version')) {
+          localStorage.setItem('app-version', versionData.version)
+        }
+      })
+      .catch((error) => {
+        console.error('Error loading version info:', error)
+      })
   }, [dynDns])
 
   // ───────────────────────────────────────────────────────────────────────────
