@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.10](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.9...v0.4.10) (2026-03-28)
+
+
+### Bug Fixes
+
+* **release:** add .versionrc.json to execute postbump hook ([784b630](https://github.com/lorenz1974/DynDnsUpdater/commit/784b63052de11f37d5ffc6c14ed75221c96f54fa))
+
 ### [0.4.9](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.8...v0.4.9) (2026-03-28)
 
 ### 0.4.8 (2026-03-28)
