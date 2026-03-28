@@ -1,6 +1,6 @@
 # DynDNS Updater
 
-**Version 0.4.1** — A Progressive Web Application built with React and React Bootstrap that automatically updates your device's IP address using the DynDNS service.
+**Version 0.4.8** — A Progressive Web Application built with React and React Bootstrap that automatically updates your device's IP address using the DynDNS service.
 
 > For detailed architecture documentation, module signatures, and event flow diagrams see [ARCHITECTURE.md](ARCHITECTURE.md).
 
