@@ -13,8 +13,7 @@
     "release": "npm run update-release-date && standard-version && git push --follow-tags origin",
     "release:patch": "npm run update-release-date && standard-version --release-as minor && git push --follow-tags origin",
     "release:bugfix": "npm run update-release-date && standard-version --release-as patch && git push --follow-tags origin",
-    "push": "git push --follow-tags origin",
-    "version": "node ./updateReleaseDate.js && git add ."
+    "push": "git push --follow-tags origin"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
