@@ -54,17 +54,27 @@ const UpdateModal = ({
         </p>
       </Modal.Body>
       <Modal.Footer className='d-flex gap-2 justify-content-center'>
-        <Button 
-          variant='secondary' 
-          onClick={onLater} 
-          style={{ minWidth: '120px', width: '45%' }}
+        <Button
+          variant='secondary'
+          onClick={onLater}
+          style={{
+            minWidth: '120px',
+            width: '45%',
+            height: '38px',
+            whiteSpace: 'nowrap',
+          }}
         >
           Later
         </Button>
-        <Button 
-          variant='primary' 
+        <Button
+          variant='primary'
           onClick={onUpdate}
-          style={{ minWidth: '120px', width: '45%' }}
+          style={{
+            minWidth: '120px',
+            width: '45%',
+            height: '38px',
+            whiteSpace: 'nowrap',
+          }}
         >
           Update now
         </Button>
