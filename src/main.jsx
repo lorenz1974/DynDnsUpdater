@@ -124,3 +124,40 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </ErrorBoundary>
 )
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 📚 CONCETTO: Service Worker Registration — PWA auto-update
+// ─────────────────────────────────────────────────────────────────────────────
+// Register service worker for PWA functionality and automatic updates
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/dyndnsupdater/service-worker.js')
+      .then((registration) => {
+        console.log('✅ Service Worker registered:', registration.scope);
+
+        // Check for updates every hour
+        setInterval(() => {
+          registration.update();
+        }, 60 * 60 * 1000);
+
+        // Listen for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available - notify user and reload
+              if (confirm('Nuova versione disponibile! Ricaricare l\'app?')) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+              }
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.error('❌ Service Worker registration failed:', error);
+      });
+  });
+}

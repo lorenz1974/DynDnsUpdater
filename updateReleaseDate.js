@@ -60,3 +60,23 @@ try {
 } catch (error) {
     console.error(`❌ Error updating App.jsx version: ${error.message}`);
 }
+
+// Update the cache version in service-worker.js
+try {
+    const serviceWorkerPath = resolve(__dirname, './public/service-worker.js');
+    let serviceWorkerContent = readFileSync(serviceWorkerPath, 'utf8');
+
+    const currentVersion = packageJson.version;
+
+    // Replace the CACHE_NAME with the new version
+    const updatedContent = serviceWorkerContent.replace(
+        /const CACHE_NAME = 'dyndns-updater-v[0-9]+\.[0-9]+\.[0-9]+'/,
+        `const CACHE_NAME = 'dyndns-updater-v${currentVersion}'`
+    );
+
+    writeFileSync(serviceWorkerPath, updatedContent, 'utf8');
+
+    console.log(`✅ Updated service-worker.js CACHE_NAME to v${currentVersion}`);
+} catch (error) {
+    console.error(`❌ Error updating service-worker.js: ${error.message}`);
+}
