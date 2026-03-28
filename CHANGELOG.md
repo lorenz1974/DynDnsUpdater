@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.18](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.17...v0.4.18) (2026-03-28)
+
+
+### Bug Fixes
+
+* **pwa:** force equal button heights with explicit sizing and nowrap ([5d19724](https://github.com/lorenz1974/DynDnsUpdater/commit/5d19724e5755450a0c9e0518b05b4414892e3720))
+
 ### [0.4.17](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.16...v0.4.17) (2026-03-28)
 
 ### [0.4.16](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.15...v0.4.16) (2026-03-28)
