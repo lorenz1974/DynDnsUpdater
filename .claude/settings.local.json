@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh run list --limit 5)",
+      "Bash(npm run build)",
+      "Bash(git remote get-url origin)",
+      "Bash(curl -s \"https://api.github.com/repos/lorenz1974/DynDnsUpdater/actions/runs?branch=master&per_page=5\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(r[''id''], r[''status''], r[''conclusion''], r[''name''], r[''created_at'']\\) for r in data.get\\(''workflow_runs'',[]\\)]\")",
+      "Bash(node -e \"let d=''''; process.stdin.on\\(''data'',c=>d+=c\\); process.stdin.on\\(''end'',\\(\\)=>{const r=JSON.parse\\(d\\); r.workflow_runs?.forEach\\(w=>console.log\\(w.id, w.status, w.conclusion, w.name, w.created_at\\)\\)}\\)\")",
+      "Bash(curl -s \"https://api.github.com/repos/lorenz1974/DynDnsUpdater/actions/runs/22818507101/jobs\")",
+      "Bash(node -e \"let d=''''; process.stdin.on\\(''data'',c=>d+=c\\); process.stdin.on\\(''end'',\\(\\)=>{const r=JSON.parse\\(d\\); r.jobs?.forEach\\(j=>{console.log\\(''JOB:'', j.name, j.status, j.conclusion\\); j.steps?.forEach\\(s=>console.log\\(''  STEP:'', s.name, s.status, s.conclusion\\)\\)}\\)}\\)\")",
+      "Bash(node -e:*)",
+      "Bash(curl -s \"https://api.github.com/repos/lorenz1974/DynDnsUpdater/pages\")"
+    ]
+  }
+}
