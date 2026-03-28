@@ -60,7 +60,6 @@ const UpdateModal = ({
           style={{
             minWidth: '120px',
             width: '45%',
-            height: '38px',
             whiteSpace: 'nowrap',
           }}
         >
@@ -72,11 +71,10 @@ const UpdateModal = ({
           style={{
             minWidth: '120px',
             width: '45%',
-            height: '38px',
             whiteSpace: 'nowrap',
           }}
         >
-          Update now
+          Update now!
         </Button>
       </Modal.Footer>
     </Modal>

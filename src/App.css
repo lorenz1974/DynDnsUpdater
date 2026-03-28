@@ -77,10 +77,14 @@ body {
 }
 
 /* Button styles */
-.btn-secondary {
-  background-color: var(--primary-color);
+.btn-secondary,
+.btn-primary {
   min-height: 48px; /* comfortable touch target */
   font-size: 1rem;
+}
+
+.btn-secondary {
+  background-color: var(--primary-color);
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
