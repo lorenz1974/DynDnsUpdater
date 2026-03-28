@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.4.8 (2026-03-28)
+
+
+### Features
+
+* **pwa:** add custom service worker for automatic updates ([a7794a1](https://github.com/lorenz1974/DynDnsUpdater/commit/a7794a1eb3bb0ec33fdb3c258913f7732a011d53))
+* **pwa:** replace update confirm with modal showing version details ([8874d9a](https://github.com/lorenz1974/DynDnsUpdater/commit/8874d9a8dad4884186dc87605139b9d67f0f38ff))
+
 ### [0.4.7](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.6...v0.4.7) (2026-03-28)
 
 ### [0.4.6](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.5...v0.4.6) (2026-03-28)
