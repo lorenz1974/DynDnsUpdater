@@ -6,7 +6,7 @@
 
 ## Overview
 
-DynDNS Updater is a lightweight, client-side application that helps maintain your dynamic DNS entries up-to-date by automatically detecting IP address changes and updating your DynDNS records accordingly.
+DynDNS Updater is a lightweight, client-side Progressive Web Application that helps maintain your dynamic DNS entries up-to-date by automatically detecting IP address changes and updating your DynDNS records accordingly.
 
 The production deployment is served at `/dyndnsupdater/` (all lowercase, case-sensitive). The Vite `base` config and `DynDnsService.getBasePath()` must match this path.
 
