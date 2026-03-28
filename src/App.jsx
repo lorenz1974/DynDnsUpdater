@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author Lorenzo Lione <https://github.com/lorenz1974>
  * @description Componente radice dell'applicazione DynDNS Updater.
- * @version 0.4.7
+ * @version 0.4.8
  * @created April 2025
  * @license MIT
  *
@@ -32,17 +32,17 @@ import '@/App.css'
 // Vantaggio: evitano percorsi relativi fragili come '../../../components/...'
 // che si rompono quando si sposta un file.
 // ─────────────────────────────────────────────────────────────────────────────
-import AppContainer from '@components/AppContainer'   // Layout: Container + Card Bootstrap
-import AppHeader from '@components/AppHeader'          // Header statico (Card.Header)
-import DynDnsForm from '@components/DynDnsForm'        // Form credenziali e configurazione
-import StatusDisplay from '@components/StatusDisplay'  // Visualizzazione IP e stato
-import AppFooter from '@components/AppFooter'          // Footer con versione (Card.Footer)
+import AppContainer from '@components/AppContainer' // Layout: Container + Card Bootstrap
+import AppHeader from '@components/AppHeader' // Header statico (Card.Header)
+import DynDnsForm from '@components/DynDnsForm' // Form credenziali e configurazione
+import StatusDisplay from '@components/StatusDisplay' // Visualizzazione IP e stato
+import AppFooter from '@components/AppFooter' // Footer con versione (Card.Footer)
 
 // I Custom Hook sono importati come normali funzioni JavaScript.
 // La convenzione `use` nel nome è obbligatoria: React li riconosce come Hook
 // e applica le regole degli Hook (non possono essere chiamati in modo condizionale).
-import useDynDnsUpdater from '@hooks/useDynDnsUpdater'  // Tutta la logica di business
-import useRefreshTimer from '@hooks/useRefreshTimer'    // Gestione del timer con countdown
+import useDynDnsUpdater from '@hooks/useDynDnsUpdater' // Tutta la logica di business
+import useRefreshTimer from '@hooks/useRefreshTimer' // Gestione del timer con countdown
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 📚 CONCETTO: Costanti dichiarate a livello di modulo (fuori dal componente)
@@ -62,13 +62,13 @@ import useRefreshTimer from '@hooks/useRefreshTimer'    // Gestione del timer co
  * @type {Array<{value: number, label: string}>}
  */
 const REFRESH_INTERVALS = [
-  { value: 15,   label: '15 seconds' },
-  { value: 30,   label: '30 seconds' },
-  { value: 45,   label: '45 seconds' },
-  { value: 60,   label: '1 minute' },
-  { value: 180,  label: '3 minutes' },
-  { value: 300,  label: '5 minutes' },
-  { value: 600,  label: '10 minutes' },
+  { value: 15, label: '15 seconds' },
+  { value: 30, label: '30 seconds' },
+  { value: 45, label: '45 seconds' },
+  { value: 60, label: '1 minute' },
+  { value: 180, label: '3 minutes' },
+  { value: 300, label: '5 minutes' },
+  { value: 600, label: '10 minutes' },
   { value: 1800, label: '30 minutes' },
   { value: 3600, label: '60 minutes' },
 ]
@@ -141,9 +141,9 @@ const App = () => {
   // se il form non è compilato, il timer rimane fermo (evita chiamate API inutili).
   // ───────────────────────────────────────────────────────────────────────────
   const refreshTimer = useRefreshTimer(
-    dynDns.refreshInterval,       // Secondi tra un refresh e l'altro
-    handleTimerRefresh,           // Cosa fare quando il timer scade (memoizzato!)
-    dynDns.isFormDataComplete     // true = timer attivo, false = timer fermo
+    dynDns.refreshInterval, // Secondi tra un refresh e l'altro
+    handleTimerRefresh, // Cosa fare quando il timer scade (memoizzato!)
+    dynDns.isFormDataComplete, // true = timer attivo, false = timer fermo
   )
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -161,10 +161,10 @@ const App = () => {
       // parseInt con radix 10: converte la stringa del <select> in numero intero
       // Il valore di un <select> è sempre una stringa in JavaScript/HTML
       const newInterval = parseInt(e.target.value, 10)
-      refreshTimer.setInterval(newInterval)    // Resetta il conto alla rovescia
-      dynDns.setRefreshInterval(newInterval)   // Persiste la preferenza
+      refreshTimer.setInterval(newInterval) // Resetta il conto alla rovescia
+      dynDns.setRefreshInterval(newInterval) // Persiste la preferenza
     },
-    [refreshTimer, dynDns]
+    [refreshTimer, dynDns],
   )
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -183,7 +183,7 @@ const App = () => {
   // ───────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     dynDns.performInitialCheck()
-    
+
     // Store current version in localStorage for update comparison
     fetch('/dyndnsupdater/version.json')
       .then((response) => response.json())
@@ -221,17 +221,17 @@ const App = () => {
             Le funzioni `onXxx` sono i callback che il form chiama per comunicare
             gli eventi dell'utente al genitore (pattern: "lifting state up"). */}
         <DynDnsForm
-          formData={dynDns.formData}                             // Valori dei campi (controlled)
-          onInputChange={dynDns.handleInputChange}               // Aggiorna formData ad ogni keystroke
-          onSubmit={dynDns.handleSubmit}                         // Submit: avvia checkAndUpdateIp
-          forceUpdate={dynDns.forceUpdate}                       // Stato checkbox "Force update"
-          onForceUpdateChange={dynDns.handleForceUpdateChange}   // Toggle forceUpdate
-          isLoading={dynDns.isLoading}                           // true → disabilita tutto durante fetch
-          currentIp={dynDns.currentIp}                          // IP attuale (per messaggio "già aggiornato")
-          storedIp={dynDns.storedIp}                            // IP su DynDNS (per confronto)
-          refreshInterval={dynDns.refreshInterval}               // Intervallo selezionato (valore nel <select>)
-          refreshIntervals={REFRESH_INTERVALS}                   // Opzioni del <select>
-          onRefreshIntervalChange={handleRefreshIntervalChange}  // Cambia intervallo (aggiorna timer + storage)
+          formData={dynDns.formData} // Valori dei campi (controlled)
+          onInputChange={dynDns.handleInputChange} // Aggiorna formData ad ogni keystroke
+          onSubmit={dynDns.handleSubmit} // Submit: avvia checkAndUpdateIp
+          forceUpdate={dynDns.forceUpdate} // Stato checkbox "Force update"
+          onForceUpdateChange={dynDns.handleForceUpdateChange} // Toggle forceUpdate
+          isLoading={dynDns.isLoading} // true → disabilita tutto durante fetch
+          currentIp={dynDns.currentIp} // IP attuale (per messaggio "già aggiornato")
+          storedIp={dynDns.storedIp} // IP su DynDNS (per confronto)
+          refreshInterval={dynDns.refreshInterval} // Intervallo selezionato (valore nel <select>)
+          refreshIntervals={REFRESH_INTERVALS} // Opzioni del <select>
+          onRefreshIntervalChange={handleRefreshIntervalChange} // Cambia intervallo (aggiorna timer + storage)
           timeUntilRefresh={refreshTimer.formattedTimeRemaining} // Countdown visibile "MM:SS"
         />
         {/* StatusDisplay è un componente puramente presentazionale:
@@ -239,7 +239,7 @@ const App = () => {
         <StatusDisplay
           currentIp={dynDns.currentIp}
           storedIp={dynDns.storedIp}
-          status={dynDns.status}       // { message: string, type: 'success'|'danger' }
+          status={dynDns.status} // { message: string, type: 'success'|'danger' }
           isLoading={dynDns.isLoading}
         />
       </Card.Body>

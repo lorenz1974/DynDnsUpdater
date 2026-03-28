@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dyndns-updater-v0.4.7';
+const CACHE_NAME = 'dyndns-updater-v0.4.8';
 const urlsToCache = [
     '/dyndnsupdater/',
     '/dyndnsupdater/index.html',
