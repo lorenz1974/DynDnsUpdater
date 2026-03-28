@@ -53,11 +53,19 @@ const UpdateModal = ({
           The application will reload to apply the update.
         </p>
       </Modal.Body>
-      <Modal.Footer className='d-flex gap-2'>
-        <Button variant='secondary' onClick={onLater} className='flex-fill'>
+      <Modal.Footer className='d-flex gap-2 justify-content-center'>
+        <Button 
+          variant='secondary' 
+          onClick={onLater} 
+          style={{ minWidth: '120px', width: '45%' }}
+        >
           Later
         </Button>
-        <Button variant='primary' onClick={onUpdate} className='flex-fill'>
+        <Button 
+          variant='primary' 
+          onClick={onUpdate}
+          style={{ minWidth: '120px', width: '45%' }}
+        >
           Update now
         </Button>
       </Modal.Footer>
