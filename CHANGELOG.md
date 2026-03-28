@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.13](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.12...v0.4.13) (2026-03-28)
+
+
+### Bug Fixes
+
+* **pwa:** improve update modal UI and translate to English ([cca913c](https://github.com/lorenz1974/DynDnsUpdater/commit/cca913ce043215d0b10778d3111c6e97ae2252b9))
+
 ### [0.4.12](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.11...v0.4.12) (2026-03-28)
 
 ### [0.4.11](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.10...v0.4.11) (2026-03-28)
