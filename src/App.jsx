@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author Lorenzo Lione <https://github.com/lorenz1974>
  * @description Componente radice dell'applicazione DynDNS Updater.
- * @version 0.4.11
+ * @version 0.4.12
  * @created April 2025
  * @license MIT
  *

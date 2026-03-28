@@ -1,7 +1,7 @@
 /**
  * @file UpdateModal.jsx
  * @author Lorenzo Lione <https://github.com/lorenz1974>
- * @description Modale per notificare aggiornamenti disponibili della PWA
+ * @description Modal to notify available PWA updates
  * @created March 2026
  * @license MIT
  */
@@ -10,14 +10,14 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 
 /**
- * UpdateModal - Modale che mostra la disponibilità di un aggiornamento
+ * UpdateModal - Modal showing update availability
  *
  * @param {Object} props
- * @param {boolean} props.show - Se il modale è visibile
- * @param {string} props.currentVersion - Versione attuale installata
- * @param {string} props.newVersion - Nuova versione disponibile
- * @param {Function} props.onUpdate - Callback per confermare l'aggiornamento
- * @param {Function} props.onLater - Callback per rimandare l'aggiornamento
+ * @param {boolean} props.show - Whether the modal is visible
+ * @param {string} props.currentVersion - Current installed version
+ * @param {string} props.newVersion - New available version
+ * @param {Function} props.onUpdate - Callback to confirm update
+ * @param {Function} props.onLater - Callback to postpone update
  */
 const UpdateModal = ({
   show,
@@ -35,30 +35,30 @@ const UpdateModal = ({
       keyboard={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>🎉 Aggiornamento Disponibile</Modal.Title>
+        <Modal.Title>⬆️ Update Available</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>È disponibile una nuova versione dell'applicazione!</p>
+        <p>A new version of the application is available!</p>
         <div className='my-3 p-3 bg-light rounded'>
           <div className='d-flex justify-content-between align-items-center mb-2'>
-            <span className='text-muted'>Versione attuale:</span>
+            <span className='text-muted'>Current version:</span>
             <strong>{currentVersion}</strong>
           </div>
           <div className='d-flex justify-content-between align-items-center'>
-            <span className='text-muted'>Nuova versione:</span>
+            <span className='text-muted'>New version:</span>
             <strong className='text-success'>{newVersion}</strong>
           </div>
         </div>
         <p className='mb-0 text-muted small'>
-          L'applicazione verrà ricaricata per applicare l'aggiornamento.
+          The application will reload to apply the update.
         </p>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant='secondary' onClick={onLater}>
-          Più tardi
+      <Modal.Footer className='d-flex gap-2'>
+        <Button variant='secondary' onClick={onLater} className='flex-fill'>
+          Later
         </Button>
-        <Button variant='primary' onClick={onUpdate}>
-          Aggiorna ora
+        <Button variant='primary' onClick={onUpdate} className='flex-fill'>
+          Update now
         </Button>
       </Modal.Footer>
     </Modal>

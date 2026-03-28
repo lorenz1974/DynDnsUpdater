@@ -216,7 +216,7 @@ function showUpdateModal(newWorker) {
     .catch((error) => {
       console.error('❌ Error fetching version info:', error)
       // Fallback to simple confirm
-      if (confirm("Nuova versione disponibile! Ricaricare l'app?")) {
+      if (confirm('New version available! Reload the app?')) {
         newWorker.postMessage({ type: 'SKIP_WAITING' })
         window.location.reload()
       }
