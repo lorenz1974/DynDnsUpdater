@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.14](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.13...v0.4.14) (2026-03-28)
+
+
+### Bug Fixes
+
+* **pwa:** ensure equal button widths in update modal with explicit sizing ([4846464](https://github.com/lorenz1974/DynDnsUpdater/commit/48464643611f1332dd90ca20a9f6ef1cf3cde8e2))
+
 ### [0.4.13](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.12...v0.4.13) (2026-03-28)
 
 
