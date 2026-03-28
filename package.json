@@ -1,8 +1,8 @@
 {
   "name": "dyndnsupdater",
   "private": true,
-  "version": "0.4.22",
-  "releaseDate": "20260328-1017",
+  "version": "0.4.23",
+  "releaseDate": "20260328-1020",
   "type": "module",
   "scripts": {
     "dev": "vite",
