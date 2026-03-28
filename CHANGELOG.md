@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.9](https://github.com/lorenz1974/DynDnsUpdater/compare/v0.4.8...v0.4.9) (2026-03-28)
+
 ### 0.4.8 (2026-03-28)
 
 
