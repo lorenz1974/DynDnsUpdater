@@ -1,5 +1,5 @@
 {
-  "scripts": {
-    "postbump": "node ./updateReleaseDate.js"
-  }
+    "scripts": {
+        "postbump": "node ./updateReleaseDate.js"
+    }
 }

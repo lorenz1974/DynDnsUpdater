@@ -44,13 +44,11 @@ App (Root Container)
 The application follows a unidirectional data flow pattern:
 
 1. **App Component (Container)**: Acts as the central orchestrator that:
-
    - Initialises and integrates the custom hooks
    - Passes state and callbacks to child components
    - Coordinates interactions between components
 
 2. **Custom Hooks (Business Logic)**:
-
    - `useDynDnsUpdater`: Manages form state, IP detection, and DynDNS updates
    - `useRefreshTimer`: Handles auto-refresh timing and countdown display
    - `useLocalStorage`: Provides data persistence across sessions
@@ -212,7 +210,7 @@ When the application starts, components are initialised in this sequence:
      const refreshTimer = useRefreshTimer(
        dynDns.refreshInterval,
        () => dynDns.checkAndUpdateIp(),
-       dynDns.isFormDataComplete
+       dynDns.isFormDataComplete,
      )
 
      useEffect(() => {
